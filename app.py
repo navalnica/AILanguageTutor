@@ -1,7 +1,10 @@
 import gradio as gr
 
+from src import tts
+from uuid import uuid4
 
-def respond(chat_history: list, user_query: str, audio_fp: str):
+
+async def respond(chat_history: list, user_query: str, audio_fp: str):
     user_query = user_query.strip()
 
     if not user_query and not audio_fp:
@@ -13,15 +16,26 @@ def respond(chat_history: list, user_query: str, audio_fp: str):
         f"audio received: {bool(audio_fp)}. "
         f"text received: {bool(user_query)}."
     )
+
+    audio_resp = None
     if user_query:
+        tts_bytes = tts.tts(text=user_query)
+        audio_resp = gr.Audio(tts_bytes)
+
+        # tts_iter = tts.tts_stream(user_query)
+        # audio_resp = gr.Audio(tts_iter, streaming=True)
+        # out_fp = f"data/{uuid4()}.wav"
+        # with open(out_fp, "wb") as fout:
+        #     async for chunk in tts_iter:
+        #         fout.write(chunk)
+        # print(f'saved to: "{out_fp}"')
+
         text_resp += f' text query: "{user_query}"'
 
     user_query_to_show = user_query
-    if audio_fp:
-        user_query_to_show = gr.Audio(audio_fp)
-        audio_resp = gr.Audio(audio_fp)
-    else:
-        audio_resp = None
+    # if audio_fp:
+    #     user_query_to_show = gr.Audio(audio_fp)
+    #     audio_resp = gr.Audio(audio_fp)
 
     chat_history.append(gr.ChatMessage(role="user", content=user_query_to_show))
     chat_history.append(gr.ChatMessage(role="assistant", content=text_resp))
