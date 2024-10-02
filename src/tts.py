@@ -4,10 +4,11 @@ from elevenlabs import VoiceSettings
 
 from src.config import ELEVEN_CLIENT_ASYNC, ELEVEN_CLIENT
 
+# TODO: tune params
 default_params = dict(
-    voice_id="pNInz6obpgDQGcFmaJgB",
+    voice_id="pNInz6obpgDQGcFmaJgB",  # TODO: select a better voice
     optimize_streaming_latency="0",
-    output_format="mp3_22050_32",
+    output_format="mp3_22050_32",  # TODO: gradio expects sr=16kHz (? need to check)
     model_id="eleven_multilingual_v2",
     voice_settings=VoiceSettings(
         stability=0.0,

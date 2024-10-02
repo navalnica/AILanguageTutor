@@ -1,6 +1,7 @@
 python-dotenv
 gradio
 elevenlabs
+openai
 
 # streamlit
 # transformers[torch]
